@@ -1,0 +1,25 @@
+[Unit]
+Description=School Payment System API
+After=network.target mysql.service
+Requires=mysql.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/school-payment-system
+Environment="PATH=/var/www/school-payment-system/venv/bin"
+ExecStart=/var/www/school-payment-system/venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+Restart=always
+RestartSec=10
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Logging
+StandardOutput=append:/var/log/school-payment/access.log
+StandardError=append:/var/log/school-payment/error.log
+
+[Install]
+WantedBy=multi-user.target
